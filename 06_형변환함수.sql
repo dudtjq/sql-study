@@ -110,7 +110,7 @@ SELECT
     employee_id AS 사원번호,
     first_name AS 이름,
     hire_date AS 입사일자,
-    TRUNC(sysdate - hire_date) / 365 AS 근속년수 
+    TRUNC((sysdate - hire_date) / 365) AS 근속년수 
 FROM employees
 WHERE (sysdate - hire_date) >= 17
 ORDER BY 근속년수 DESC;
