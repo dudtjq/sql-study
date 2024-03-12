@@ -126,7 +126,7 @@ EMPLOYEES 테이블에서 JOB_ID가 it_prog인 사원의 이름(first_name)과 급여(salary)를
 
 SELECT 
     RPAD(SUBSTR(first_name, 1, 3), LENGTH(first_name), '*' ) AS name,
-    LPAD(salary, 10, '*')
+    LPAD(salary, 10, '*') AS salary
 FROM employees
 WHERE LOWER(job_id) = 'it_prog';
 
