@@ -42,6 +42,47 @@ SELECT *
 FROM info i, auth a
 WHERE i.auth_id = a.auth_id(+);
 
+-- FULL : 좌측테이블과 우측 테이블 데이터를 모두 읽어 표현하는 외부 조인
+SELECT * 
+FROM info i FULL JOIN auth a
+ON i.auth_id = a.auth_id;
+
+-- CROSS JOIN은 JOIN조건을 설정 하지 않기 때문에
+-- 단순히 모든 컬럼에 대한 JOIN을 진행
+-- 실제로는 거의 사용 x
+SELECT * FROM info
+CROSS JOIN auth; 
+
+SELECT * FROM info, auth;
+
+-- 여러 개 테이블 조언 -> 키 값을 찾아 구문을 연결해서 사용
+SELECT * 
+FROM employees e
+LEFT JOIN departments d ON e.department_id = d.department_id
+LEFT JOIN locations loc ON d.location_id = loc.location_id;
+
+/*
+- 테이블 별칭 a, i를 이용하여 LEFT OUTER JOIN 사용.
+- info, auth 테이블 사용
+- job 컬럼이 scientist인 사람의 id, title, content, job을 출력.
+*/
+SELECT
+    i.id, i.title, i.content, a.job
+FROM info i
+RIGHT JOIN auth a 
+ON i.auth_id = a.auth_id
+WHERE a.job = 'scientist';
+
+-- 셀프 조인이란 동일 테이블 사이의 조인을 말합니다.
+-- 동일 테이블 컬럼을 통해 기존의 존재하는 값을 매칭시켜 가져올 때 사용
+SELECT 
+    e1.employee_id, e1.first_name, e1.manager_id,
+    e2.first_name, e2.employee_id
+FROM employees e1
+JOIN employees e2
+ON e1.manager_id = e2.employee_id
+ORDER BY e1.employee_id;
+
 
 
 
