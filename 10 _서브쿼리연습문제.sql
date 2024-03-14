@@ -250,24 +250,39 @@ JOIN departments d
 ON e.department_id = d.department_id
 WHERE e.job_id = 'SA_MAN';
 
+SELECT 
+    tbl.*, d.department_name
+FROM 
+    (
+    SELECT 
+        last_name, job_id, department_id
+    FROM employees
+    WHERE job_id = 'SA_MAN'
+    )tb1
+JOIN departments d
+ON tbl.department_id = d.department_id;
 
 /*
-문제 14
 -- DEPARTMENTS 테이블에서 각 부서의 ID, NAME, MANAGER_ID와 부서에 속한 인원수를 출력하세요.
 -- 인원수 기준 내림차순 정렬하세요.
 -- 사람이 없는 부서는 출력하지 않습니다.
 */
 
 SELECT 
-    d1.department_id, 
-    d2.department_name, 
-    d2.manager_id,
-    COUNT(1)
-FROM departments d1
-LEFT JOIN departments d2
-ON d1.department_id = d2.department_id
-WHERE d1.department_id IS NOT NULL
-ORDER BY COUNT(1) DESC;
+   d.department_id, d.department_name, d.manager_id,
+    (
+        SELECT
+            COUNT(1) 
+        FROM employees e
+        WHERE e.department_id = d.department_id
+    )AS total
+FROM departments d 
+WHERE EXISTS(
+    SELECT 1
+    FROM employees e
+    WHERE e.department_id = d.department_id
+)
+ORDER BY total DESC;
 
 
 
@@ -277,7 +292,7 @@ ORDER BY COUNT(1) DESC;
 --부서별 평균이 없으면 0으로 출력하세요.
 */
     
-    SELECT * FROM locations;
+SELECT * FROM locations;
     
 SELECT 
     loc.street_address,
