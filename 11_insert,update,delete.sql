@@ -77,7 +77,13 @@ SELECT * FROM emps;
 -- DELETE 도 WHERE 을 지정하지 않으면 테이블 전체 행이 대상이 됩니다.
 DELETE FROM emps
 WHERE employee_id = 103;
-SELECT * FROM employees;
+SELECT * FROM emps;
+
+-- DELETE (서브쿼리)
+DELETE FROM emps
+WHERE department_id = (SELECT department_id FROM departments 
+                        WHERE department_name = 'IT');
+ROLLBACK;
    
    
    

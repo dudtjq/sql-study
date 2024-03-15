@@ -170,3 +170,32 @@ WHEN NOT MATCHED THEN
     INSERT VALUES
         (d.department_id, d.department_name, d.manager_id, d.location_id);
      
+-- 문제 5
+-- 5 - 1
+CREATE TABLE jobs_it AS
+(SELECT * FROM jobs WHERE jobs.min_salary > 6000);
+
+-- 5 - 2
+INSERT INTO jobs_it VALUES('IT_DEV', '아이티 개발팀', 6000, 20000);
+INSERT INTO jobs_it VALUES('NET_DEV', '네트워크 개발팀', 5000, 20000);
+INSERT INTO jobs_it VALUES('SEC_DEV', '보안 개발팀', 6000, 19000);
+
+-- 5 - 4
+
+MERGE INTO jobs_it a
+    USING (SELECT * FROM jobs WHERE jobs.min_salary > 5000) b
+    ON (a.job_id = b.job_id)
+WHEN MATCHED THEN
+    UPDATE SET 
+        a.min_salary = b.min_salary,
+        a.max_salary = b.max_salary
+
+WHEN NOT MATCHED THEN
+    INSERT VALUES
+        (b.job_id, b.job_title, b.min_salary, b.max_salary);
+
+
+
+
+
+
