@@ -117,6 +117,8 @@ VALUES('DDD', 4, sysdate, 'M', 2000);
 
 SELECT * FROM members;
 
+COMMIT;
+
 SELECT 
     m.m_name, m.m_num,
     loc.street_address, loc.location_id
