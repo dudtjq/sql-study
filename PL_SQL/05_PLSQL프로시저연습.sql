@@ -28,53 +28,58 @@ depts 테이블에
 그리고 정상종료라면 commit, 예외라면 롤백 처리하도록 처리하세요.
 */
 
-SELECT * FROM depts;
-
 CREATE OR REPLACE PROCEDURE depts_proc
-    (depts_deptm IN depts_department_id%TYPE,
-     depts_deptn IN depts_department_name%TYPE,
-     depts_flag IN VARCHAR2
+    (
+        p_dept_id IN depts.department_id%TYPE,
+        p_dept_name IN depts.department_name%TYPE,
+        p_flag IN VARCHAR2
     )
 IS
     v_cnt NUMBER := 0;
 BEGIN
     
-    SELECT 
-        COUNT(1)
-    INTO
-        v_cnt
+    SELECT COUNT(*)
+    INTO v_cnt
     FROM depts
-    WHERE department_id = depts_deptm;
+    WHERE department_id = p_dept_id;
     
-    IF depts_flag = 'I' THEN
+    IF p_flag = 'I' THEN
         INSERT INTO depts
         (department_id, department_name)
-        VALUES(depts_deptm, depts_deptn);
-    ELSIF depts_flag = 'U' THEN
+        VALUES(p_dept_id, p_dept_name);
+    ELSIF p_flag = 'U' THEN
+        IF v_cnt = 0 THEN
+            dbms_output.put_line('수정하고자 하는 부서가 존재하지 않습니다.');
+            RETURN;
+        END IF;
+    
         UPDATE depts
-        SET department_name = depts_deptn
-        WHERE department_id = depts_deptm;
-    ELSIF depts_flag = 'D' THEN
-        dbms_output.put_line('삭제하고자 하는 부서가 존재 하지 않습니다.');
-        RETURN;
+        SET department_name = p_dept_name
+        WHERE department_id = p_dept_id;
+    ELSIF p_flag = 'D' THEN
+        IF v_cnt = 0 THEN
+            dbms_output.put_line('삭제하고자 하는 부서가 존재하지 않습니다.');
+            RETURN;
+        END IF;
         DELETE FROM depts
-        WHERE department_id = depts_deptm;
-        
+        WHERE department_id = p_dept_id;
     ELSE
         dbms_output.put_line('해당 flag에 대한 동작이 준비되지 않았습니다.');
-     END IF;
-     
-     COMMIT;
-     
-     EXCEPTION 
+    END IF;
+    
+    COMMIT;
+    
+    EXCEPTION 
         WHEN OTHERS THEN
-            dbms_output.put_line('예외가 발생하였습니다.');
-            dbms_output.put_line('SQL ERROR CODE : ' || SQLCODE);
-            dbms_output.put_line('SQL ERROR MSG : ' || SQLERRM);
+            dbms_output.put_line('예외가 발생했습니다.');
+            dbms_output.put_line('ERROR msg: ' || SQLERRM);
             ROLLBACK;
 END;
 
-EXEC depts_proc(400, '개발부', 'I');
+EXEC depts_proc(80, '영업부', 'I');
+
+ALTER TABLE depts ADD CONSTRAINT depts_deptno_pk PRIMARY KEY(department_id);
+SELECT * FROM depts;
 
 
 /*
@@ -110,7 +115,7 @@ END;
 DECLARE
     v_year NUMBER;
 BEGIN
-    emp_hire_date(100, v_year);
+    emp_hire_date(576, v_year);
     IF v_year > 0 THEN
     dbms_output.put_line('근속년수 : ' || v_year || '년');
     END IF;
