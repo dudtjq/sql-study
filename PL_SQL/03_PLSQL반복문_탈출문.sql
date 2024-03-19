@@ -116,8 +116,10 @@ BEGIN
        v_count := v_count + 1;
     END LOOP;
 END;    
- SELECT * FROM board;
+ SELECT * FROM board
+ ORDER BY bno DESC;
 
+COMMIT;
 
 
 

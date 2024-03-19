@@ -1,4 +1,16 @@
-SET SERVEROUTPUT on; -- 출력문 활성화
+set serveroutput on;
+
+DECLARE -- 변수를 선언하는 구간(선언부)
+
+    emp_num NUMBER; -- 변수 선언
+    
+BEGIN -- 코드를 실행하는 구간(실행부)
+
+    emp_num := 10; -- 대입 연산자 :=
+    DBMS_OUTPUT.put_line(emp_num);
+    DBMS_OUTPUT.put_line('Hello Worid!');
+    
+END;
 
 DECLARE
 

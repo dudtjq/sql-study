@@ -23,11 +23,11 @@ BEGIN
     dbms_output.put_line('트리거가 동작함.'); -- 실행하고자 하는 코드를 begin ~ end 사이에 넣음
 END;
     
+INSERT INTO tbl_test VALUES(3, '박영희');
 
+UPDATE tbl_test SET text = '김계똥' WHERE id = 1;
 
-
-
-
+DELETE FROM tbl_test WHERE id = 2;
 
 
 
